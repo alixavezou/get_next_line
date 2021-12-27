@@ -5,12 +5,14 @@ int	ft_checkendofline(char *buffer_save)
 	int	i;
 
 	i = 0;
+	if (!buffer_save)
+		return (1);
 	while (buffer_save[i])
 	{
 		if (buffer_save[i] == '\n')
 			return (0);
 		i++;
-	}	
+	}
 	return (1);
 }
 
@@ -25,16 +27,23 @@ char	*ft_print_line(char *buffer_save)
 	while (buffer_save[i] && buffer_save[i] != '\n')
 		i++;
 	line = ft_substr(buffer_save, 0, i + 1);
+	if (!line)
+	{
+		free(line);
+		return (NULL);
+	}
 	return (line);
 }
 
 char	*ft_get_buffer_save(char *buffer_save)
 {
-	int	i;
-	int	len;
+	int		i;
+	int		strlen;
+	char	*new_buffer_save;
 
+	new_buffer_save = NULL;
 	i = 0;
-	len = ft_strlen(buffer_save);
+	strlen = ft_strlen(buffer_save);
 	if (!buffer_save)
 		return (NULL);
 	while (buffer_save[i])
@@ -42,14 +51,15 @@ char	*ft_get_buffer_save(char *buffer_save)
 		if (buffer_save[i] == '\n' && buffer_save[i + 1] != '\0')
 		{
 			i += 1;
-			buffer_save = ft_substr(buffer_save, i, len - i + 1);
+			new_buffer_save = ft_substr(buffer_save, i, (strlen - i) + 1);
 			break ;
 		}
 		else if (buffer_save[i + 1] == '\0')
 			buffer_save[0] = '\0';
 		i++;
 	}
-	return (buffer_save);
+	free (buffer_save);
+	return (new_buffer_save);
 }
 
 char	*ft_read(int fd, char *buffer_read)
@@ -61,6 +71,8 @@ char	*ft_read(int fd, char *buffer_read)
 	ret = 1;
 	while (ret > 0)
 	{
+		if (ft_checkendofline(buffer_save) == 0)
+			break ;
 		ret = read(fd, buffer_read, BUFFER_SIZE);
 		if (ret <= 0)
 			break ;
@@ -69,30 +81,19 @@ char	*ft_read(int fd, char *buffer_read)
 			buffer_save = ft_strdup(buffer_read);
 		else
 			buffer_save = ft_strjoin(buffer_save, buffer_read);
-		if (ft_checkendofline(buffer_save) == 0)
-			break ;
 	}
 	line = ft_print_line(buffer_save);
 	buffer_save = ft_get_buffer_save(buffer_save);
-	if (line == 0)
-		free(line);
-	if (ret == 0 && line == 0 && buffer_save == 0)
-		free(buffer_save);
 	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	char	*line;
-	char	buffer_read[BUFFER_SIZE + 1];
+	char		*line;
+	char		buffer_read[BUFFER_SIZE + 1];
 
 	if (fd > 1024 || fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = ft_read(fd, buffer_read);
-	if (line == 0)
-	{
-		free(line);
-		line = NULL;
-	}
 	return (line);
 }
