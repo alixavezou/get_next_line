@@ -4,9 +4,10 @@
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aavezou <aavezou@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alixavezou <alixavezou@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 13:19:45 by aavezou           #+#    #+#             */
-/*   Updated: 2021/12/27 15:21:34 by aavezou          ###   ########.fr       */
+/*   Updated: 2023/01/03 15:13:29 by alixavezou       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +31,3 @@ char	*get_next_line(int fd);
 char	*ft_strdup(char *src);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_substr(char *s, unsigned int start, size_t len);
-
-#endif
